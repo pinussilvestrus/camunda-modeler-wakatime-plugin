@@ -31,6 +31,9 @@
   },
   "dependencies": {
     "camunda-modeler-plugin-helpers": "^3.0.0",
-    "inherits": "^2.0.3"
+    "electron": "^4.1.4",
+    "inherits": "^2.0.3",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
   }
 }
