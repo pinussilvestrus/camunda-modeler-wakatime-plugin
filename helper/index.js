@@ -1,6 +1,6 @@
 /* global window */
 
-import request from 'request-promise';
+var request = require('request-promise');
 
 // todo(pinussilvestrus): read from package
 const VERSION = '0.1.0';
@@ -15,7 +15,7 @@ function btoa(String) {
  * @param {String} options.entity
  * @param {Date} options.time
  */
-export async function sendHeartbeat(options) {
+async function sendHeartbeat(options) {
 
   const {
     apiKey,
@@ -46,11 +46,11 @@ export async function sendHeartbeat(options) {
 }
 
 /** browser only */
-export function electronRequire(component) {
+function electronRequire(component) {
   return window.require('electron')[component];
 }
 
-export default {
+module.exports = {
   sendHeartbeat,
   electronRequire
 };

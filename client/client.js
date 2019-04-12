@@ -1,9 +1,24 @@
+/* global window */
+
 import { registerBpmnJSPlugin } from 'camunda-modeler-plugin-helpers';
+
+import module from './module';
 
 import {
   electronRequire,
   sendHeartbeat
 } from '../helper';
+
+function registerApiKey() {
+
+  const {
+    app
+  } = electronRequire('remote');
+
+  const apiKey = app.flags.get('wakatime-api-key');
+
+  window.wakatimeApiKey = apiKey;
+}
 
 function registerWindowListeners() {
 
@@ -11,7 +26,7 @@ function registerWindowListeners() {
     app
   } = electronRequire('remote');
 
-  const apiKey = app.flags.get('wakatime-api-key');
+  const apiKey = window.wakatimeApiKey;
 
   if (!apiKey) {
     return;
@@ -29,5 +44,9 @@ function registerWindowListeners() {
     });
   });
 }
-// registerBpmnJSPlugin(module);
+
+registerApiKey();
+
 registerWindowListeners();
+
+registerBpmnJSPlugin(module);

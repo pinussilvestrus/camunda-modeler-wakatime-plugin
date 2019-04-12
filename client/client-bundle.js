@@ -96,18 +96,36 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var camunda_modeler_plugin_helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! camunda-modeler-plugin-helpers */ "./node_modules/camunda-modeler-plugin-helpers/index.js");
-/* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helper */ "./helper/index.js");
+/* harmony import */ var _module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./module */ "./client/module.js");
+/* harmony import */ var _module__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_module__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helper */ "./helper/index.js");
+/* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_helper__WEBPACK_IMPORTED_MODULE_2__);
+/* global window */
 
 
 
+
+
+
+
+function registerApiKey() {
+
+  const {
+    app
+  } = Object(_helper__WEBPACK_IMPORTED_MODULE_2__["electronRequire"])('remote');
+
+  const apiKey = app.flags.get('wakatime-api-key');
+
+  window.wakatimeApiKey = apiKey;
+}
 
 function registerWindowListeners() {
 
   const {
     app
-  } = Object(_helper__WEBPACK_IMPORTED_MODULE_1__["electronRequire"])('remote');
+  } = Object(_helper__WEBPACK_IMPORTED_MODULE_2__["electronRequire"])('remote');
 
-  const apiKey = app.flags.get('wakatime-api-key');
+  const apiKey = window.wakatimeApiKey;
 
   if (!apiKey) {
     return;
@@ -118,15 +136,75 @@ function registerWindowListeners() {
   } = app;
 
   mainWindow.on('focus', function(e) {
-    Object(_helper__WEBPACK_IMPORTED_MODULE_1__["sendHeartbeat"])({
+    Object(_helper__WEBPACK_IMPORTED_MODULE_2__["sendHeartbeat"])({
       apiKey,
       time: new Date(),
       project: 'Camunda Modeler'
     });
   });
 }
-// registerBpmnJSPlugin(module);
+
+registerApiKey();
+
 registerWindowListeners();
+
+Object(camunda_modeler_plugin_helpers__WEBPACK_IMPORTED_MODULE_0__["registerBpmnJSPlugin"])(_module__WEBPACK_IMPORTED_MODULE_1___default.a);
+
+/***/ }),
+
+/***/ "./client/module.js":
+/*!**************************!*\
+  !*** ./client/module.js ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/* global window */
+
+var sendHeartbeat = __webpack_require__(/*! ../helper */ "./helper/index.js").sendHeartbeat;
+
+function BpmnWakatimePlugin(eventBus, canvas) {
+  this._canvas = canvas;
+
+  const self = this;
+
+  const apiKey = window.wakatimeApiKey;
+
+  // send on several modeling event
+  eventBus.on([
+    'connect.start', 'connect.end', 'shape.added',
+    'element.click', 'drag.start'
+  ], function(event) {
+    const root = self._canvas.getRootElement();
+
+    const entity = root.id;
+
+    // console.log("Send heartbeat for event '" + event.type + "' and definition '" + entity + "'");
+
+    if (!apiKey) {
+      return;
+    }
+
+    sendHeartbeat({
+      apiKey: apiKey,
+      entity: entity,
+      time: new Date()
+    });
+
+  });
+}
+
+BpmnWakatimePlugin.$inject = [
+  'eventBus',
+  'canvas'
+];
+
+module.exports = {
+  __init__: [ 'wakatimePlugin' ],
+  wakatimePlugin: [ 'type', BpmnWakatimePlugin ]
+};
 
 /***/ }),
 
@@ -134,18 +212,12 @@ registerWindowListeners();
 /*!*************************!*\
   !*** ./helper/index.js ***!
   \*************************/
-/*! exports provided: sendHeartbeat, electronRequire, default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(Buffer) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sendHeartbeat", function() { return sendHeartbeat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "electronRequire", function() { return electronRequire; });
-/* harmony import */ var request_promise__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! request-promise */ "./node_modules/request-promise/lib/rp.js");
-/* harmony import */ var request_promise__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(request_promise__WEBPACK_IMPORTED_MODULE_0__);
-/* global window */
+/* WEBPACK VAR INJECTION */(function(Buffer) {/* global window */
 
-
+var request = __webpack_require__(/*! request-promise */ "./node_modules/request-promise/lib/rp.js");
 
 // todo(pinussilvestrus): read from package
 const VERSION = '0.1.0';
@@ -180,7 +252,7 @@ async function sendHeartbeat(options) {
 
   const url = 'https://wakatime.com/api/v1/heartbeats';
 
-  return await request_promise__WEBPACK_IMPORTED_MODULE_0___default.a.post({
+  return await request.post({
     headers: {
       'content-type': 'application/json',
       'Authorization': `Basic ${btoa(apiKey)}`
@@ -195,10 +267,10 @@ function electronRequire(component) {
   return window.require('electron')[component];
 }
 
-/* harmony default export */ __webpack_exports__["default"] = ({
+module.exports = {
   sendHeartbeat,
   electronRequire
-});
+};
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node_modules/buffer/index.js */ "./node_modules/buffer/index.js").Buffer))
 
 /***/ }),
