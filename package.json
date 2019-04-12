@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "all": "run-s bundle",
+    "lint": "eslint .",
     "client": "run-s bundle",
-    "bundle": "webpack ./client/client.js -o client/client-bundle.js --devtool sourcemap --mode development"
+    "bundle": "webpack",
+    "test": "run-s lint all"
   },
   "repository": {
     "type": "git",
@@ -32,8 +34,9 @@
   "dependencies": {
     "camunda-modeler-plugin-helpers": "^3.0.0",
     "electron": "^4.1.4",
+    "eslint": "^5.16.0",
+    "eslint-plugin-bpmn-io": "^0.7.0",
     "inherits": "^2.0.3",
-    "request": "^2.88.0",
     "request-promise": "^4.2.4"
   }
 }

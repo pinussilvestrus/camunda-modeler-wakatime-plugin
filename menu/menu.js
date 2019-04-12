@@ -22,7 +22,7 @@ module.exports = function(electronApp, menuState) {
   }
 
   return [{
-    label: 'Wakatime API Key',
+    label: 'Show API Key',
     action: function() {
 
       const apiKey = getApiKey();
@@ -41,7 +41,7 @@ module.exports = function(electronApp, menuState) {
     }
   },
   {
-    label: 'Wakatime Send Heartbeat',
+    label: 'Send Heartbeat',
     action: async function() {
 
       const apiKey = getApiKey();
@@ -56,7 +56,6 @@ module.exports = function(electronApp, menuState) {
       try {
         await sendHeartbeat({
           apiKey,
-          project: 'Camunda Modeler',
           time: new Date()
         });
       } catch (e) {

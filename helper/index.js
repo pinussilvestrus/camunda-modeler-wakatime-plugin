@@ -1,4 +1,6 @@
-var request = require('request-promise');
+/* global window */
+
+import request from 'request-promise';
 
 // todo(pinussilvestrus): read from package
 const VERSION = '0.1.0';
@@ -7,28 +9,33 @@ function btoa(String) {
   return Buffer.from(String).toString('base64');
 }
 
-async function sendHeartbeat(options) {
+/**
+ * Sends activity heartbeat from application to Wakatime
+ * @param {String} options.apiKey
+ * @param {String} options.entity
+ * @param {Date} options.time
+ */
+export async function sendHeartbeat(options) {
 
   const {
     apiKey,
-    project,
+    entity,
     time
   } = options;
 
   const data = {
     time: time / 1000,
-    entity: 'modeling', // todo(pinussilvestrus)
-    type: 'app',
-    project: project,
+    category: 'designing',
+    entity: entity || 'Modeling BPMN',
+    type: entity ? 'domain' : 'app',
+    project: 'Camunda Modeler',
     language: 'xml',
     plugin: `camunda-modeler-wakatime/${VERSION}`
   };
 
-  console.log(data);
-
   const url = 'https://wakatime.com/api/v1/heartbeats';
 
-  const response = await request.post({
+  return await request.post({
     headers: {
       'content-type': 'application/json',
       'Authorization': `Basic ${btoa(apiKey)}`
@@ -36,11 +43,14 @@ async function sendHeartbeat(options) {
     url,
     body: JSON.stringify(data)
   });
-
-  console.log(response);
 }
 
+/** browser only */
+export function electronRequire(component) {
+  return window.require('electron')[component];
+}
 
-module.exports = {
-  sendHeartbeat
+export default {
+  sendHeartbeat,
+  electronRequire
 };
