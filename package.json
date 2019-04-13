@@ -1,6 +1,6 @@
 {
   "name": "camunda-modeler-wakatime-plugin",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Wakatime Plugin for the Camunda Modeler",
   "main": "index.js",
   "scripts": {
