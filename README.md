@@ -43,11 +43,21 @@ Before the application will send heartbeats to Wakatime, you will have to add an
 }
 ```
 
+or to `$WAKATIME_HOME/.wakatime.cfg` (likely inside your `$HOME` directory)
+
+```ini
+
+[settings]
+api_key = YOUR_API_KEY
+
+```
+
 
 ## Additional Resources
 
 * [Flags documentation](https://github.com/camunda/camunda-modeler/tree/master/docs/flags)
 * [Plugins documentation](https://github.com/camunda/camunda-modeler/tree/master/docs/plugins)
+* [Wakatime configuration documentation](https://github.com/wakatime/wakatime#configuring)
 
 
 ## Licence
