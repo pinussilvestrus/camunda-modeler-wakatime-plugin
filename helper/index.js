@@ -1,8 +1,11 @@
 /* global window */
 
 var request = require('request-promise');
+var ini = require('ini');
 
 var VERSION = require('../package.json').version;
+
+var API_KEY_FLAG = 'wakatime-api-key';
 
 function btoa(String) {
   return Buffer.from(String).toString('base64');
@@ -44,12 +47,51 @@ async function sendHeartbeat(options) {
   });
 }
 
+function getHomeDirectory() {
+  var os = electronRequire('remote').require('os');
+
+  return process.env.WAKATIME_HOME || os.homedir();
+}
+
+/**
+ * Fetches Wakatime api key from flags or global configuration
+ * @param {ElectronApp} app
+ *
+ * @returns {String}
+ */
+function retrieveApiKey(app) {
+
+  // 1: load from flags.json
+  if (app && app.flags.get(API_KEY_FLAG)) {
+    return app.flags.get(API_KEY_FLAG);
+  }
+
+  // 2: load from $WAKATIME_HOME/.wakatime.cfg
+  var homePath = getHomeDirectory() + '/.wakatime.cfg';
+
+  var fs = electronRequire('remote').require('fs');
+
+  if (fs.existsSync(homePath)) {
+    var config = ini.parse(fs.readFileSync(homePath, 'utf-8'));
+
+    var apiKey = config.settings['api_key'];
+
+    if (app) {
+      app.flags[API_KEY_FLAG] = apiKey;
+    }
+
+    return apiKey;
+  }
+
+}
+
 /** browser only */
 function electronRequire(component) {
   return window.require('electron')[component];
 }
 
 module.exports = {
-  sendHeartbeat,
-  electronRequire
+  electronRequire,
+  retrieveApiKey,
+  sendHeartbeat
 };
