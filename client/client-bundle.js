@@ -264,8 +264,8 @@ async function sendHeartbeat(options) {
   });
 }
 
-function getHomeDirectory() {
-  var os = electronRequire('remote').require('os');
+function getHomeDirectory(require) {
+  var os = electronRequire('remote', require).require('os');
 
   return process.env.WAKATIME_HOME || os.homedir();
 }
@@ -276,7 +276,7 @@ function getHomeDirectory() {
  *
  * @returns {String}
  */
-function retrieveApiKey(app) {
+function retrieveApiKey(app, require) {
 
   // 1: load from flags.json
   if (app && app.flags.get(API_KEY_FLAG)) {
@@ -284,9 +284,9 @@ function retrieveApiKey(app) {
   }
 
   // 2: load from $WAKATIME_HOME/.wakatime.cfg
-  var homePath = getHomeDirectory() + '/.wakatime.cfg';
+  var homePath = getHomeDirectory(require) + '/.wakatime.cfg';
 
-  var fs = electronRequire('remote').require('fs');
+  var fs = electronRequire('remote', require).require('fs');
 
   if (fs.existsSync(homePath)) {
     var config = ini.parse(fs.readFileSync(homePath, 'utf-8'));
@@ -302,9 +302,17 @@ function retrieveApiKey(app) {
 
 }
 
-/** browser only */
-function electronRequire(component) {
-  return window.require('electron')[component];
+// todo(pinussilvestrus): distinct browser from main process in a more clear way
+function electronRequire(component, require) {
+  try {
+
+    // browser
+    return window.require('electron')[component];
+  } catch (e) {
+
+    // main process, back to default
+    return { require };
+  }
 }
 
 module.exports = {
