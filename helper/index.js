@@ -2,8 +2,7 @@
 
 var request = require('request-promise');
 
-// todo(pinussilvestrus): read from package
-const VERSION = '0.1.0';
+var VERSION = require('../package.json').version;
 
 function btoa(String) {
   return Buffer.from(String).toString('base64');
