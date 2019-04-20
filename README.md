@@ -55,9 +55,9 @@ api_key = YOUR_API_KEY
 
 ## Additional Resources
 
-* [Flags documentation](https://github.com/camunda/camunda-modeler/tree/master/docs/flags)
-* [Plugins documentation](https://github.com/camunda/camunda-modeler/tree/master/docs/plugins)
-* [Wakatime configuration documentation](https://github.com/wakatime/wakatime#configuring)
+* [Camunda Modeler: Flags documentation](https://github.com/camunda/camunda-modeler/tree/master/docs/flags)
+* [Camunda Modeler: Plugins documentation](https://github.com/camunda/camunda-modeler/tree/master/docs/plugins)
+* [Wakatime: Configuration documentation](https://github.com/wakatime/wakatime#configuring)
 
 
 ## Licence
