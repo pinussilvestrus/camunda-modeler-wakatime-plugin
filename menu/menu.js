@@ -30,10 +30,7 @@ module.exports = function(electronApp, menuState) {
       const apiKey = getApiKey();
 
       if (!apiKey) {
-        return showMessage({
-          message: 'No API-Key available! Please add one in the \'flags.json\' or \'$WAKATIME_HOME/.wakatime.cfg\'',
-          type: 'error'
-        });
+        return showMessage(getApiKeyError());
       }
 
       showMessage({
@@ -49,10 +46,7 @@ module.exports = function(electronApp, menuState) {
       const apiKey = getApiKey();
 
       if (!apiKey) {
-        return showMessage({
-          message: 'No API-Key available! Please add one in the \'flags.json\' or \'$WAKATIME_HOME/.wakatime.cfg\'',
-          type: 'error'
-        });
+        return showMessage(getApiKeyError());
       }
 
       try {
@@ -70,3 +64,12 @@ module.exports = function(electronApp, menuState) {
     }
   }];
 };
+
+// helpers //////////
+
+function getApiKeyError() {
+  return {
+    message: 'No API-Key available! Please add one in the \'flags.json\' or \'$WAKATIME_HOME/.wakatime.cfg\'',
+    type: 'error'
+  };
+}
