@@ -3,6 +3,8 @@
 const { dialog } = require('electron');
 const sendHeartbeat = require('../helper').sendHeartbeat;
 
+const retrieveApiKey = require('../helper').retrieveApiKey;
+
 module.exports = function(electronApp, menuState) {
 
   function showMessage(options) {
@@ -18,7 +20,7 @@ module.exports = function(electronApp, menuState) {
   }
 
   function getApiKey() {
-    return electronApp.flags.get('wakatime-api-key');
+    return retrieveApiKey(electronApp, require);
   }
 
   return [{
@@ -29,7 +31,7 @@ module.exports = function(electronApp, menuState) {
 
       if (!apiKey) {
         return showMessage({
-          message: 'No API-Key available! Please add one in the \'flags.json\'',
+          message: 'No API-Key available! Please add one in the \'flags.json\' or \'$WAKATIME_HOME/.wakatime.cfg\'',
           type: 'error'
         });
       }
@@ -41,14 +43,14 @@ module.exports = function(electronApp, menuState) {
     }
   },
   {
-    label: 'Send Heartbeat',
+    label: 'Send Heartbeat (Demo)',
     action: async function() {
 
       const apiKey = getApiKey();
 
       if (!apiKey) {
         return showMessage({
-          message: 'No API-Key available! Please add one in the \'flags.json\'',
+          message: 'No API-Key available! Please add one in the \'flags.json\' or \'$WAKATIME_HOME/.wakatime.cfg\'',
           type: 'error'
         });
       }
