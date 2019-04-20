@@ -52,6 +52,9 @@ api_key = YOUR_API_KEY
 
 ```
 
+## Screenshots
+
+![](./resources/wakatime-screenshot.png)
 
 ## Additional Resources
 
