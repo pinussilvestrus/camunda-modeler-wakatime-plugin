@@ -8,7 +8,8 @@ import module from './module';
 
 import {
   electronRequire,
-  sendHeartbeat
+  retrieveApiKey,
+  sendHeartbeat,
 } from '../helper';
 
 function registerApiKey() {
@@ -17,7 +18,7 @@ function registerApiKey() {
     app
   } = electronRequire('remote');
 
-  const apiKey = app.flags.get('wakatime-api-key');
+  const apiKey = retrieveApiKey(app);
 
   window.wakatimeApiKey = apiKey;
 }
