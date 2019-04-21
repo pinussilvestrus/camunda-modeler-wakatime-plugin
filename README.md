@@ -56,6 +56,18 @@ api_key = YOUR_API_KEY
 
 ![](./resources/wakatime-screenshot.png)
 
+## Logging
+
+To enable logging different actions + errors to the Camunda  Modeler application log, simply add the `debug` option to your `$WAKATIME_HOME/.wakatime.cfg` configuration
+
+```ini
+
+[settings]
+debug = true
+
+```
+
+
 ## Additional Resources
 
 * [Camunda Modeler: Flags documentation](https://github.com/camunda/camunda-modeler/tree/master/docs/flags)
