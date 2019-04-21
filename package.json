@@ -7,7 +7,9 @@
     "all": "run-s bundle",
     "lint": "eslint .",
     "client": "run-s bundle",
-    "bundle": "webpack",
+    "bundle:client": "webpack --config webpackClient.config.js",
+    "bundle:menu": "webpack --config webpackMenu.config.js",
+    "bundle": "run-s bundle:client bundle:menu",
     "test": "run-s lint all"
   },
   "repository": {
