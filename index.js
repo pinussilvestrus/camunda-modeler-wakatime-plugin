@@ -2,7 +2,7 @@
 
 module.exports = {
   name: 'Wakatime',
-  menu: './menu/menu.js',
+  menu: './menu/menu-bundle.js',
   script: './client/client-bundle.js',
   style: './style/style.css'
 };
