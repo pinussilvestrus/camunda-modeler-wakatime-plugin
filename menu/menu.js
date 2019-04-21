@@ -20,7 +20,7 @@ module.exports = function(electronApp, menuState) {
   }
 
   function getApiKey() {
-    return retrieveApiKey(electronApp, require);
+    return retrieveApiKey(electronApp);
   }
 
   return [{

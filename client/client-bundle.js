@@ -222,6 +222,25 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./helper sync recursive":
+/*!*********************!*\
+  !*** ./helper sync ***!
+  \*********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function webpackEmptyContext(req) {
+	var e = new Error("Cannot find module '" + req + "'");
+	e.code = 'MODULE_NOT_FOUND';
+	throw e;
+}
+webpackEmptyContext.keys = function() { return []; };
+webpackEmptyContext.resolve = webpackEmptyContext;
+module.exports = webpackEmptyContext;
+webpackEmptyContext.id = "./helper sync recursive";
+
+/***/ }),
+
 /***/ "./helper/index.js":
 /*!*************************!*\
   !*** ./helper/index.js ***!
@@ -229,7 +248,7 @@ module.exports = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(Buffer, process) {/* global window */
+/* WEBPACK VAR INJECTION */(function(Buffer, process) {var require;/* global window */
 
 var request = __webpack_require__(/*! request-promise */ "./node_modules/request-promise/lib/rp.js");
 var ini = __webpack_require__(/*! ini */ "./node_modules/ini/ini.js");
@@ -278,16 +297,16 @@ async function sendHeartbeat(options) {
   });
 }
 
-function getHomeDirectory(require) {
-  const os = electronRequire('remote', require).require('os');
+function getHomeDirectory() {
+  const os = electronRequire('remote').require('os');
 
   return process.env.WAKATIME_HOME || os.homedir();
 }
 
-function loadConfig(require) {
-  const homePath = getHomeDirectory(require) + '/.wakatime.cfg';
+function loadConfig() {
+  const homePath = getHomeDirectory() + '/.wakatime.cfg';
 
-  const fs = electronRequire('remote', require).require('fs');
+  const fs = electronRequire('remote').require('fs');
 
   if (fs.existsSync(homePath)) {
     const config = ini.parse(fs.readFileSync(homePath, 'utf-8'));
@@ -302,7 +321,7 @@ function loadConfig(require) {
  *
  * @returns {String}
  */
-function retrieveApiKey(app, require) {
+function retrieveApiKey(app) {
 
   // 1: load from flags.json
   if (app && app.flags.get(API_KEY_FLAG)) {
@@ -310,7 +329,7 @@ function retrieveApiKey(app, require) {
   }
 
   // 2: load from $WAKATIME_HOME/.wakatime.cfg
-  const config = loadConfig(require);
+  const config = loadConfig();
 
   if (config && config.settings) {
 
@@ -334,22 +353,21 @@ function applicationLog(options) {
 
   const {
     message,
-    require,
     type
   } = options;
 
-  const config = loadConfig(require);
+  const config = loadConfig();
 
   if (config && (config.settings || {}).debug) {
 
-    var log = electronRequire('remote', require).require('./log')('plugin:wakatime');
+    var log = electronRequire('remote').require('./log')('plugin:wakatime');
 
     type === 'info' ? log.info(message) : log.error(message);
   }
 }
 
 // todo(pinussilvestrus): distinct browser from main process in a more clear way
-function electronRequire(component, require) {
+function electronRequire(component) {
   try {
 
     // browser
@@ -357,7 +375,9 @@ function electronRequire(component, require) {
   } catch (e) {
 
     // main process, back to default
-    return { require };
+    const r = require;
+
+    return { require: __webpack_require__("./helper sync recursive") };
   }
 }
 
@@ -73405,7 +73425,7 @@ function extend() {
 /*! exports provided: name, version, description, main, scripts, repository, keywords, author, license, bugs, homepage, devDependencies, dependencies, default */
 /***/ (function(module) {
 
-module.exports = {"name":"camunda-modeler-wakatime-plugin","version":"0.3.1","description":"Wakatime Plugin for the Camunda Modeler","main":"index.js","scripts":{"all":"run-s bundle","lint":"eslint .","client":"run-s bundle","bundle":"webpack","test":"run-s lint all"},"repository":{"type":"git","url":"git+https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin.git"},"keywords":["camunda","modeler","plugin","wakatime"],"author":"Niklas Kiefer","license":"MIT","bugs":{"url":"https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin/issues"},"homepage":"https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin#readme","devDependencies":{"npm-run-all":"^4.1.5","webpack":"^4.28.1","webpack-cli":"^3.2.1"},"dependencies":{"camunda-modeler-plugin-helpers":"^3.0.0","electron":"^4.1.4","eslint":"^5.16.0","eslint-plugin-bpmn-io":"^0.7.0","inherits":"^2.0.3","ini":"^1.3.5","request-promise":"^4.2.4"}};
+module.exports = {"name":"camunda-modeler-wakatime-plugin","version":"0.4.0","description":"Wakatime Plugin for the Camunda Modeler","main":"index.js","scripts":{"all":"run-s bundle","lint":"eslint .","client":"run-s bundle","bundle":"webpack","test":"run-s lint all"},"repository":{"type":"git","url":"git+https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin.git"},"keywords":["camunda","modeler","plugin","wakatime"],"author":"Niklas Kiefer","license":"MIT","bugs":{"url":"https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin/issues"},"homepage":"https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin#readme","devDependencies":{"npm-run-all":"^4.1.5","webpack":"^4.28.1","webpack-cli":"^3.2.1"},"dependencies":{"camunda-modeler-plugin-helpers":"^3.0.0","electron":"^4.1.4","eslint":"^5.16.0","eslint-plugin-bpmn-io":"^0.7.0","inherits":"^2.0.3","ini":"^1.3.5","request-promise":"^4.2.4"}};
 
 /***/ }),
 

@@ -47,16 +47,16 @@ async function sendHeartbeat(options) {
   });
 }
 
-function getHomeDirectory(require) {
-  const os = electronRequire('remote', require).require('os');
+function getHomeDirectory() {
+  const os = electronRequire('remote').require('os');
 
   return process.env.WAKATIME_HOME || os.homedir();
 }
 
-function loadConfig(require) {
-  const homePath = getHomeDirectory(require) + '/.wakatime.cfg';
+function loadConfig() {
+  const homePath = getHomeDirectory() + '/.wakatime.cfg';
 
-  const fs = electronRequire('remote', require).require('fs');
+  const fs = electronRequire('remote').require('fs');
 
   if (fs.existsSync(homePath)) {
     const config = ini.parse(fs.readFileSync(homePath, 'utf-8'));
@@ -71,7 +71,7 @@ function loadConfig(require) {
  *
  * @returns {String}
  */
-function retrieveApiKey(app, require) {
+function retrieveApiKey(app) {
 
   // 1: load from flags.json
   if (app && app.flags.get(API_KEY_FLAG)) {
@@ -79,7 +79,7 @@ function retrieveApiKey(app, require) {
   }
 
   // 2: load from $WAKATIME_HOME/.wakatime.cfg
-  const config = loadConfig(require);
+  const config = loadConfig();
 
   if (config && config.settings) {
 
@@ -103,22 +103,20 @@ function applicationLog(options) {
 
   const {
     message,
-    require,
     type
   } = options;
 
-  const config = loadConfig(require);
+  const config = loadConfig();
 
   if (config && (config.settings || {}).debug) {
 
-    var log = electronRequire('remote', require).require('./log')('plugin:wakatime');
+    var log = electronRequire('remote').require('./log')('plugin:wakatime');
 
     type === 'info' ? log.info(message) : log.error(message);
   }
 }
 
-// todo(pinussilvestrus): distinct browser from main process in a more clear way
-function electronRequire(component, require) {
+function electronRequire(component) {
   try {
 
     // browser
@@ -126,7 +124,9 @@ function electronRequire(component, require) {
   } catch (e) {
 
     // main process, back to default
-    return { require };
+    const r = require;
+
+    return { require: r };
   }
 }
 
