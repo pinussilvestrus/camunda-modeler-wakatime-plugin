@@ -366,7 +366,6 @@ function applicationLog(options) {
   }
 }
 
-// todo(pinussilvestrus): distinct browser from main process in a more clear way
 function electronRequire(component) {
   try {
 
