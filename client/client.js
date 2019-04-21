@@ -7,6 +7,7 @@ import {
 import module from './module';
 
 import {
+  applicationLog,
   electronRequire,
   retrieveApiKey,
   sendHeartbeat,
@@ -39,12 +40,20 @@ function registerWindowListeners() {
     mainWindow
   } = app;
 
-  mainWindow.on('focus', function(e) {
-    sendHeartbeat({
-      apiKey,
-      time: new Date(),
-      project: 'Camunda Modeler'
+  const options = {
+    apiKey,
+    time: new Date(),
+    project: 'Camunda Modeler'
+  };
+
+  mainWindow.on('focus', async function(e) {
+    await sendHeartbeat(options);
+
+    applicationLog({
+      message: `Sent heartbeat to Wakatime, timestamp: ${options.time}`,
+      type: 'info'
     });
+
   });
 }
 

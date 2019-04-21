@@ -1,8 +1,8 @@
 'use strict';
 
 const { dialog } = require('electron');
-const sendHeartbeat = require('../helper').sendHeartbeat;
 
+const sendHeartbeat = require('../helper').sendHeartbeat;
 const retrieveApiKey = require('../helper').retrieveApiKey;
 
 module.exports = function(electronApp, menuState) {
@@ -50,10 +50,19 @@ module.exports = function(electronApp, menuState) {
       }
 
       try {
-        await sendHeartbeat({
+
+        const options = {
           apiKey,
           time: new Date()
+        };
+
+        await sendHeartbeat(options);
+
+        showMessage({
+          message: `Sent heartbeat to Wakatime, timestamp: ${options.time}`,
+          type: 'info'
         });
+
       } catch (e) {
         showMessage({
           message: e.stacktrace,

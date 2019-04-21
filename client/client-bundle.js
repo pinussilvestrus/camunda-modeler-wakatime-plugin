@@ -135,12 +135,20 @@ function registerWindowListeners() {
     mainWindow
   } = app;
 
-  mainWindow.on('focus', function(e) {
-    Object(_helper__WEBPACK_IMPORTED_MODULE_2__["sendHeartbeat"])({
-      apiKey,
-      time: new Date(),
-      project: 'Camunda Modeler'
+  const options = {
+    apiKey,
+    time: new Date(),
+    project: 'Camunda Modeler'
+  };
+
+  mainWindow.on('focus', async function(e) {
+    await Object(_helper__WEBPACK_IMPORTED_MODULE_2__["sendHeartbeat"])(options);
+
+    Object(_helper__WEBPACK_IMPORTED_MODULE_2__["applicationLog"])({
+      message: `Sent heartbeat to Wakatime, timestamp: ${options.time}`,
+      type: 'info'
     });
+
   });
 }
 
@@ -163,7 +171,8 @@ Object(camunda_modeler_plugin_helpers__WEBPACK_IMPORTED_MODULE_0__["registerBpmn
 
 /* global window */
 
-var sendHeartbeat = __webpack_require__(/*! ../helper */ "./helper/index.js").sendHeartbeat;
+const applicationLog = __webpack_require__(/*! ../helper */ "./helper/index.js").applicationLog;
+const sendHeartbeat = __webpack_require__(/*! ../helper */ "./helper/index.js").sendHeartbeat;
 
 function BpmnWakatimePlugin(eventBus, canvas) {
   this._canvas = canvas;
@@ -181,16 +190,21 @@ function BpmnWakatimePlugin(eventBus, canvas) {
 
     const entity = root.id;
 
-    // console.log("Send heartbeat for event '" + event.type + "' and definition '" + entity + "'");
-
     if (!apiKey) {
       return;
     }
 
-    sendHeartbeat({
+    const options = {
       apiKey: apiKey,
       entity: entity,
       time: new Date()
+    };
+
+    sendHeartbeat(options);
+
+    applicationLog({
+      message: `Sent heartbeat to Wakatime, timestamp: ${options.time}, entity ${options.entity}`,
+      type: 'info'
     });
 
   });
@@ -270,6 +284,18 @@ function getHomeDirectory(require) {
   return process.env.WAKATIME_HOME || os.homedir();
 }
 
+function loadConfig(require) {
+  var homePath = getHomeDirectory(require) + '/.wakatime.cfg';
+
+  var fs = electronRequire('remote', require).require('fs');
+
+  if (fs.existsSync(homePath)) {
+    var config = ini.parse(fs.readFileSync(homePath, 'utf-8'));
+
+    return config;
+  }
+}
+
 /**
  * Fetches Wakatime api key from flags or global configuration
  * @param {ElectronApp} app
@@ -284,12 +310,9 @@ function retrieveApiKey(app, require) {
   }
 
   // 2: load from $WAKATIME_HOME/.wakatime.cfg
-  var homePath = getHomeDirectory(require) + '/.wakatime.cfg';
+  var config = loadConfig(require);
 
-  var fs = electronRequire('remote', require).require('fs');
-
-  if (fs.existsSync(homePath)) {
-    var config = ini.parse(fs.readFileSync(homePath, 'utf-8'));
+  if (config && config.settings) {
 
     var apiKey = config.settings['api_key'];
 
@@ -300,6 +323,29 @@ function retrieveApiKey(app, require) {
     return apiKey;
   }
 
+}
+
+/**
+ * Logs message to application log
+ * @param {String} options.message
+ * @param {String} options.type
+ */
+function applicationLog(options) {
+
+  const {
+    message,
+    require,
+    type
+  } = options;
+
+  var config = loadConfig(require);
+
+  if (config && (config.settings || {}).debug) {
+
+    var log = electronRequire('remote', require).require('./log')('plugin:wakatime');
+
+    type === 'info' ? log.info(message) : log.error(message);
+  }
 }
 
 // todo(pinussilvestrus): distinct browser from main process in a more clear way
@@ -316,6 +362,7 @@ function electronRequire(component, require) {
 }
 
 module.exports = {
+  applicationLog,
   electronRequire,
   retrieveApiKey,
   sendHeartbeat
@@ -73358,7 +73405,7 @@ function extend() {
 /*! exports provided: name, version, description, main, scripts, repository, keywords, author, license, bugs, homepage, devDependencies, dependencies, default */
 /***/ (function(module) {
 
-module.exports = {"name":"camunda-modeler-wakatime-plugin","version":"0.3.0","description":"Wakatime Plugin for the Camunda Modeler","main":"index.js","scripts":{"all":"run-s bundle","lint":"eslint .","client":"run-s bundle","bundle":"webpack","test":"run-s lint all"},"repository":{"type":"git","url":"git+https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin.git"},"keywords":["camunda","modeler","plugin","wakatime"],"author":"Niklas Kiefer","license":"MIT","bugs":{"url":"https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin/issues"},"homepage":"https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin#readme","devDependencies":{"npm-run-all":"^4.1.5","webpack":"^4.28.1","webpack-cli":"^3.2.1"},"dependencies":{"camunda-modeler-plugin-helpers":"^3.0.0","electron":"^4.1.4","eslint":"^5.16.0","eslint-plugin-bpmn-io":"^0.7.0","inherits":"^2.0.3","ini":"^1.3.5","request-promise":"^4.2.4"}};
+module.exports = {"name":"camunda-modeler-wakatime-plugin","version":"0.3.1","description":"Wakatime Plugin for the Camunda Modeler","main":"index.js","scripts":{"all":"run-s bundle","lint":"eslint .","client":"run-s bundle","bundle":"webpack","test":"run-s lint all"},"repository":{"type":"git","url":"git+https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin.git"},"keywords":["camunda","modeler","plugin","wakatime"],"author":"Niklas Kiefer","license":"MIT","bugs":{"url":"https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin/issues"},"homepage":"https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin#readme","devDependencies":{"npm-run-all":"^4.1.5","webpack":"^4.28.1","webpack-cli":"^3.2.1"},"dependencies":{"camunda-modeler-plugin-helpers":"^3.0.0","electron":"^4.1.4","eslint":"^5.16.0","eslint-plugin-bpmn-io":"^0.7.0","inherits":"^2.0.3","ini":"^1.3.5","request-promise":"^4.2.4"}};
 
 /***/ }),
 

@@ -1,7 +1,8 @@
 'use strict';
 /* global window */
 
-var sendHeartbeat = require('../helper').sendHeartbeat;
+const applicationLog = require('../helper').applicationLog;
+const sendHeartbeat = require('../helper').sendHeartbeat;
 
 function BpmnWakatimePlugin(eventBus, canvas) {
   this._canvas = canvas;
@@ -19,16 +20,21 @@ function BpmnWakatimePlugin(eventBus, canvas) {
 
     const entity = root.id;
 
-    // console.log("Send heartbeat for event '" + event.type + "' and definition '" + entity + "'");
-
     if (!apiKey) {
       return;
     }
 
-    sendHeartbeat({
+    const options = {
       apiKey: apiKey,
       entity: entity,
       time: new Date()
+    };
+
+    sendHeartbeat(options);
+
+    applicationLog({
+      message: `Sent heartbeat to Wakatime, timestamp: ${options.time}, entity ${options.entity}`,
+      type: 'info'
     });
 
   });
