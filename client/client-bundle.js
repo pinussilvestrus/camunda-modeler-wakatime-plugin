@@ -279,18 +279,18 @@ async function sendHeartbeat(options) {
 }
 
 function getHomeDirectory(require) {
-  var os = electronRequire('remote', require).require('os');
+  const os = electronRequire('remote', require).require('os');
 
   return process.env.WAKATIME_HOME || os.homedir();
 }
 
 function loadConfig(require) {
-  var homePath = getHomeDirectory(require) + '/.wakatime.cfg';
+  const homePath = getHomeDirectory(require) + '/.wakatime.cfg';
 
-  var fs = electronRequire('remote', require).require('fs');
+  const fs = electronRequire('remote', require).require('fs');
 
   if (fs.existsSync(homePath)) {
-    var config = ini.parse(fs.readFileSync(homePath, 'utf-8'));
+    const config = ini.parse(fs.readFileSync(homePath, 'utf-8'));
 
     return config;
   }
@@ -310,11 +310,11 @@ function retrieveApiKey(app, require) {
   }
 
   // 2: load from $WAKATIME_HOME/.wakatime.cfg
-  var config = loadConfig(require);
+  const config = loadConfig(require);
 
   if (config && config.settings) {
 
-    var apiKey = config.settings['api_key'];
+    const apiKey = config.settings['api_key'];
 
     if (app) {
       app.flags[API_KEY_FLAG] = apiKey;
@@ -338,7 +338,7 @@ function applicationLog(options) {
     type
   } = options;
 
-  var config = loadConfig(require);
+  const config = loadConfig(require);
 
   if (config && (config.settings || {}).debug) {
 
