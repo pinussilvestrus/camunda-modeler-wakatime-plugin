@@ -53,6 +53,18 @@ function getHomeDirectory(require) {
   return process.env.WAKATIME_HOME || os.homedir();
 }
 
+function loadConfig(require) {
+  var homePath = getHomeDirectory(require) + '/.wakatime.cfg';
+
+  var fs = electronRequire('remote', require).require('fs');
+
+  if (fs.existsSync(homePath)) {
+    var config = ini.parse(fs.readFileSync(homePath, 'utf-8'));
+
+    return config;
+  }
+}
+
 /**
  * Fetches Wakatime api key from flags or global configuration
  * @param {ElectronApp} app
@@ -67,12 +79,9 @@ function retrieveApiKey(app, require) {
   }
 
   // 2: load from $WAKATIME_HOME/.wakatime.cfg
-  var homePath = getHomeDirectory(require) + '/.wakatime.cfg';
+  var config = loadConfig(require);
 
-  var fs = electronRequire('remote', require).require('fs');
-
-  if (fs.existsSync(homePath)) {
-    var config = ini.parse(fs.readFileSync(homePath, 'utf-8'));
+  if (config && config.settings) {
 
     var apiKey = config.settings['api_key'];
 
@@ -83,6 +92,29 @@ function retrieveApiKey(app, require) {
     return apiKey;
   }
 
+}
+
+/**
+ * Logs message to application log
+ * @param {String} options.message
+ * @param {String} options.type
+ */
+function applicationLog(options) {
+
+  const {
+    message,
+    require,
+    type
+  } = options;
+
+  var config = loadConfig(require);
+
+  if (config && (config.settings || {}).debug) {
+
+    var log = electronRequire('remote', require).require('./log')('plugin:wakatime');
+
+    type === 'info' ? log.info(message) : log.error(message);
+  }
 }
 
 // todo(pinussilvestrus): distinct browser from main process in a more clear way
@@ -99,6 +131,7 @@ function electronRequire(component, require) {
 }
 
 module.exports = {
+  applicationLog,
   electronRequire,
   retrieveApiKey,
   sendHeartbeat
