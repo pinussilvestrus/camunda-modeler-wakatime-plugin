@@ -22,14 +22,10 @@ Install dependencies:
 npm install
 ```
 
-Package plugin to `client/client-bundle.js`:
+Package plugin to `client/client-bundle.js` + `menu/menu-bundle.js`:
 
 ```sh
 npm run bundle
-
-# or
-
-npm run bundle -- --watch
 ```
 
 
