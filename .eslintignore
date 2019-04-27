@@ -1,3 +1,5 @@
 node_modules/
 client/client-bundle.js
 client/client-bunde.js.map
+menu/menu-bundle.js
+menu/menu-bunde.js.map
