@@ -2,10 +2,17 @@
 
 var request = require('request-promise');
 var ini = require('ini');
+var os = require('os');
+var fs = require('fs');
 
 var VERSION = require('../package.json').version;
 
 var API_KEY_FLAG = 'wakatime-api-key';
+
+var FALLBACK_REQUIRE_MAP = {
+  'os': os,
+  'fs':  fs
+}
 
 function btoa(String) {
   return Buffer.from(String).toString('base64');
@@ -48,7 +55,7 @@ async function sendHeartbeat(options) {
 }
 
 function getHomeDirectory() {
-  const os = electronRequire('remote').require('os');
+  const os = remoteRequire('os');
 
   return process.env.WAKATIME_HOME || os.homedir();
 }
@@ -56,7 +63,7 @@ function getHomeDirectory() {
 function loadConfig() {
   const homePath = getHomeDirectory() + '/.wakatime.cfg';
 
-  const fs = electronRequire('remote').require('fs');
+  const fs = remoteRequire('fs');
 
   if (fs.existsSync(homePath)) {
     const config = ini.parse(fs.readFileSync(homePath, 'utf-8'));
@@ -110,24 +117,28 @@ function applicationLog(options) {
 
   if (config && (config.settings || {}).debug) {
 
-    var log = electronRequire('remote').require('./log')('plugin:wakatime');
+    var log = remoteRequire('./log')('plugin:wakatime');
 
     type === 'info' ? log.info(message) : log.error(message);
   }
 }
 
-function electronRequire(component) {
+function remoteRequire(module) {
   try {
 
     // browser
-    return window.require('electron')[component];
+    const r = electronRequire('remote').require;
+
+    return r(module);
   } catch (e) {
 
     // main process, back to default
-    const r = require;
-
-    return { require: r };
+    return FALLBACK_REQUIRE_MAP[module];
   }
+}
+
+function electronRequire(component) {
+  return window.require('electron')[component];
 }
 
 module.exports = {
