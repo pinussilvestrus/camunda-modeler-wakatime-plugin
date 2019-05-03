@@ -117,7 +117,7 @@ var API_KEY_FLAG = 'wakatime-api-key';
 var FALLBACK_REQUIRE_MAP = {
   'os': os,
   'fs':  fs
-}
+};
 
 function btoa(String) {
   return Buffer.from(String).toString('base64');
