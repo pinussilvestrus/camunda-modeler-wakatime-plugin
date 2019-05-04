@@ -42,7 +42,7 @@ async function sendHeartbeat(options) {
     plugin: `camunda-modeler-wakatime/${VERSION}`
   };
 
-  const url = 'https://wakatime.com/api/v1/heartbeats';
+  const url = 'https://api.wakatime.com/api/v1/heartbeats';
 
   return await request.post({
     headers: {
