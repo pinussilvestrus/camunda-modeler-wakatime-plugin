@@ -24732,7 +24732,6 @@ module.exports = CipherBase
 /* WEBPACK VAR INJECTION */(function(Buffer) {var util = __webpack_require__(/*! util */ "./node_modules/util/util.js");
 var Stream = __webpack_require__(/*! stream */ "./node_modules/stream-browserify/index.js").Stream;
 var DelayedStream = __webpack_require__(/*! delayed-stream */ "./node_modules/delayed-stream/lib/delayed_stream.js");
-var defer = __webpack_require__(/*! ./defer.js */ "./node_modules/combined-stream/lib/defer.js");
 
 module.exports = CombinedStream;
 function CombinedStream() {
@@ -24745,6 +24744,8 @@ function CombinedStream() {
   this._released = false;
   this._streams = [];
   this._currentStream = null;
+  this._insideLoop = false;
+  this._pendingNext = false;
 }
 util.inherits(CombinedStream, Stream);
 
@@ -24799,6 +24800,24 @@ CombinedStream.prototype.pipe = function(dest, options) {
 
 CombinedStream.prototype._getNext = function() {
   this._currentStream = null;
+
+  if (this._insideLoop) {
+    this._pendingNext = true;
+    return; // defer call
+  }
+
+  this._insideLoop = true;
+  try {
+    do {
+      this._pendingNext = false;
+      this._realGetNext();
+    } while (this._pendingNext);
+  } finally {
+    this._insideLoop = false;
+  }
+};
+
+CombinedStream.prototype._realGetNext = function() {
   var stream = this._streams.shift();
 
 
@@ -24820,7 +24839,7 @@ CombinedStream.prototype._getNext = function() {
       this._handleErrors(stream);
     }
 
-    defer(this._pipeNext.bind(this, stream));
+    this._pipeNext(stream);
   }.bind(this));
 };
 
@@ -24920,44 +24939,6 @@ CombinedStream.prototype._emitError = function(err) {
 };
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../buffer/index.js */ "./node_modules/buffer/index.js").Buffer))
-
-/***/ }),
-
-/***/ "./node_modules/combined-stream/lib/defer.js":
-/*!***************************************************!*\
-  !*** ./node_modules/combined-stream/lib/defer.js ***!
-  \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(setImmediate, process) {module.exports = defer;
-
-/**
- * Runs provided function on next iteration of the event loop
- *
- * @param {function} fn - function to run
- */
-function defer(fn)
-{
-  var nextTick = typeof setImmediate == 'function'
-    ? setImmediate
-    : (
-      typeof process == 'object' && typeof process.nextTick == 'function'
-      ? process.nextTick
-      : null
-    );
-
-  if (nextTick)
-  {
-    nextTick(fn);
-  }
-  else
-  {
-    setTimeout(fn, 0);
-  }
-}
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../timers-browserify/main.js */ "./node_modules/timers-browserify/main.js").setImmediate, __webpack_require__(/*! ./../../process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
 
@@ -73417,7 +73398,7 @@ function extend() {
 /*! exports provided: name, version, description, main, scripts, repository, keywords, author, license, bugs, homepage, devDependencies, dependencies, default */
 /***/ (function(module) {
 
-module.exports = {"name":"camunda-modeler-wakatime-plugin","version":"0.4.4","description":"Wakatime Plugin for the Camunda Modeler","main":"index.js","scripts":{"all":"run-s bundle","lint":"eslint .","client":"run-s bundle","bundle:client":"webpack --config webpackClient.config.js","bundle:menu":"webpack --config webpackMenu.config.js","bundle":"run-s bundle:client bundle:menu","test":"run-s lint all"},"repository":{"type":"git","url":"git+https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin.git"},"keywords":["camunda","modeler","plugin","wakatime"],"author":"Niklas Kiefer","license":"MIT","bugs":{"url":"https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin/issues"},"homepage":"https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin#readme","devDependencies":{"npm-run-all":"^4.1.5","webpack":"^4.28.1","webpack-cli":"^3.2.1"},"dependencies":{"camunda-modeler-plugin-helpers":"^3.0.0","electron":"^5.0.0","eslint":"^5.16.0","eslint-plugin-bpmn-io":"^0.7.0","inherits":"^2.0.3","ini":"^1.3.5","request-promise":"^4.2.4"}};
+module.exports = {"name":"camunda-modeler-wakatime-plugin","version":"0.4.4","description":"Wakatime Plugin for the Camunda Modeler","main":"index.js","scripts":{"all":"run-s bundle","lint":"eslint .","client":"run-s bundle","bundle:client":"webpack --config webpackClient.config.js","bundle:menu":"webpack --config webpackMenu.config.js","bundle":"run-s bundle:client bundle:menu","test":"run-s lint all"},"repository":{"type":"git","url":"git+https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin.git"},"keywords":["camunda","modeler","plugin","wakatime"],"author":"Niklas Kiefer","license":"MIT","bugs":{"url":"https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin/issues"},"homepage":"https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin#readme","devDependencies":{"npm-run-all":"^4.1.5","webpack":"^4.28.1","webpack-cli":"^3.2.1"},"dependencies":{"camunda-modeler-plugin-helpers":"^3.0.0","electron":"^5.0.2","eslint":"^5.16.0","eslint-plugin-bpmn-io":"^0.7.0","inherits":"^2.0.3","ini":"^1.3.5","request-promise":"^4.2.4"}};
 
 /***/ }),
 
