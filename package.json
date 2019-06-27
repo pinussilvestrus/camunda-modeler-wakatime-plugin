@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "camunda-modeler-plugin-helpers": "^3.1.0",
-    "electron": "^5.0.5",
+    "electron": "^5.0.6",
     "eslint": "^5.16.0",
     "eslint-plugin-bpmn-io": "^0.8.2",
     "inherits": "^2.0.4",
