@@ -10288,7 +10288,8 @@ function toByteArray (b64) {
     ? validLen - 4
     : validLen
 
-  for (var i = 0; i < len; i += 4) {
+  var i
+  for (i = 0; i < len; i += 4) {
     tmp =
       (revLookup[b64.charCodeAt(i)] << 18) |
       (revLookup[b64.charCodeAt(i + 1)] << 12) |
@@ -29077,8 +29078,9 @@ Point.prototype.getY = function getY() {
 
 Point.prototype.mul = function mul(k) {
   k = new BN(k, 16);
-
-  if (this._hasDoubles(k))
+  if (this.isInfinity())
+    return this;
+  else if (this._hasDoubles(k))
     return this.curve._fixedNafMul(this, k);
   else if (this.curve.endo)
     return this.curve._endoWnafMulAdd([ this ], [ k ]);
@@ -31582,10 +31584,10 @@ utils.intFromLE = intFromLE;
 /*!********************************************!*\
   !*** ./node_modules/elliptic/package.json ***!
   \********************************************/
-/*! exports provided: name, version, description, main, files, scripts, repository, keywords, author, license, bugs, homepage, devDependencies, dependencies, _resolved, _integrity, _from, default */
+/*! exports provided: _from, _id, _inBundle, _integrity, _location, _phantomChildren, _requested, _requiredBy, _resolved, _shasum, _spec, _where, author, bugs, bundleDependencies, dependencies, deprecated, description, devDependencies, files, homepage, keywords, license, main, name, repository, scripts, version, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"name\":\"elliptic\",\"version\":\"6.5.0\",\"description\":\"EC cryptography\",\"main\":\"lib/elliptic.js\",\"files\":[\"lib\"],\"scripts\":{\"jscs\":\"jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js\",\"jshint\":\"jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js\",\"lint\":\"npm run jscs && npm run jshint\",\"unit\":\"istanbul test _mocha --reporter=spec test/index.js\",\"test\":\"npm run lint && npm run unit\",\"version\":\"grunt dist && git add dist/\"},\"repository\":{\"type\":\"git\",\"url\":\"git@github.com:indutny/elliptic\"},\"keywords\":[\"EC\",\"Elliptic\",\"curve\",\"Cryptography\"],\"author\":\"Fedor Indutny <fedor@indutny.com>\",\"license\":\"MIT\",\"bugs\":{\"url\":\"https://github.com/indutny/elliptic/issues\"},\"homepage\":\"https://github.com/indutny/elliptic\",\"devDependencies\":{\"brfs\":\"^1.4.3\",\"coveralls\":\"^2.11.3\",\"grunt\":\"^0.4.5\",\"grunt-browserify\":\"^5.0.0\",\"grunt-cli\":\"^1.2.0\",\"grunt-contrib-connect\":\"^1.0.0\",\"grunt-contrib-copy\":\"^1.0.0\",\"grunt-contrib-uglify\":\"^1.0.1\",\"grunt-mocha-istanbul\":\"^3.0.1\",\"grunt-saucelabs\":\"^8.6.2\",\"istanbul\":\"^0.4.2\",\"jscs\":\"^2.9.0\",\"jshint\":\"^2.6.0\",\"mocha\":\"^2.1.0\"},\"dependencies\":{\"bn.js\":\"^4.4.0\",\"brorand\":\"^1.0.1\",\"hash.js\":\"^1.0.0\",\"hmac-drbg\":\"^1.0.0\",\"inherits\":\"^2.0.1\",\"minimalistic-assert\":\"^1.0.0\",\"minimalistic-crypto-utils\":\"^1.0.0\"},\"_resolved\":\"https://registry.npmjs.org/elliptic/-/elliptic-6.5.0.tgz\",\"_integrity\":\"sha512-eFOJTMyCYb7xtE/caJ6JJu+bhi67WCYNbkGSknu20pmM8Ke/bqOfdnZWxyoGN26JgfxTbXrsCkEw4KheCT/KGg==\",\"_from\":\"elliptic@6.5.0\"}");
+module.exports = JSON.parse("{\"_from\":\"elliptic@^6.0.0\",\"_id\":\"elliptic@6.5.1\",\"_inBundle\":false,\"_integrity\":\"sha512-xvJINNLbTeWQjrl6X+7eQCrIy/YPv5XCpKW6kB5mKvtnGILoLDcySuwomfdzt0BMdLNVnuRNTuzKNHj0bva1Cg==\",\"_location\":\"/elliptic\",\"_phantomChildren\":{},\"_requested\":{\"type\":\"range\",\"registry\":true,\"raw\":\"elliptic@^6.0.0\",\"name\":\"elliptic\",\"escapedName\":\"elliptic\",\"rawSpec\":\"^6.0.0\",\"saveSpec\":null,\"fetchSpec\":\"^6.0.0\"},\"_requiredBy\":[\"/browserify-sign\",\"/create-ecdh\"],\"_resolved\":\"https://registry.npmjs.org/elliptic/-/elliptic-6.5.1.tgz\",\"_shasum\":\"c380f5f909bf1b9b4428d028cd18d3b0efd6b52b\",\"_spec\":\"elliptic@^6.0.0\",\"_where\":\"/Users/niklas.kiefer/camunda-modeler-wakatime-plugin/node_modules/browserify-sign\",\"author\":{\"name\":\"Fedor Indutny\",\"email\":\"fedor@indutny.com\"},\"bugs\":{\"url\":\"https://github.com/indutny/elliptic/issues\"},\"bundleDependencies\":false,\"dependencies\":{\"bn.js\":\"^4.4.0\",\"brorand\":\"^1.0.1\",\"hash.js\":\"^1.0.0\",\"hmac-drbg\":\"^1.0.0\",\"inherits\":\"^2.0.1\",\"minimalistic-assert\":\"^1.0.0\",\"minimalistic-crypto-utils\":\"^1.0.0\"},\"deprecated\":false,\"description\":\"EC cryptography\",\"devDependencies\":{\"brfs\":\"^1.4.3\",\"coveralls\":\"^3.0.4\",\"grunt\":\"^1.0.4\",\"grunt-browserify\":\"^5.0.0\",\"grunt-cli\":\"^1.2.0\",\"grunt-contrib-connect\":\"^1.0.0\",\"grunt-contrib-copy\":\"^1.0.0\",\"grunt-contrib-uglify\":\"^1.0.1\",\"grunt-mocha-istanbul\":\"^3.0.1\",\"grunt-saucelabs\":\"^9.0.1\",\"istanbul\":\"^0.4.2\",\"jscs\":\"^3.0.7\",\"jshint\":\"^2.6.0\",\"mocha\":\"^6.1.4\"},\"files\":[\"lib\"],\"homepage\":\"https://github.com/indutny/elliptic\",\"keywords\":[\"EC\",\"Elliptic\",\"curve\",\"Cryptography\"],\"license\":\"MIT\",\"main\":\"lib/elliptic.js\",\"name\":\"elliptic\",\"repository\":{\"type\":\"git\",\"url\":\"git+ssh://git@github.com/indutny/elliptic.git\"},\"scripts\":{\"jscs\":\"jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js\",\"jshint\":\"jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js\",\"lint\":\"npm run jscs && npm run jshint\",\"test\":\"npm run lint && npm run unit\",\"unit\":\"istanbul test _mocha --reporter=spec test/index.js\",\"version\":\"grunt dist && git add dist/\"},\"version\":\"6.5.1\"}");
 
 /***/ }),
 
@@ -40259,79 +40261,6 @@ utils.encode = function encode(arr, enc) {
 
 /***/ }),
 
-/***/ "./node_modules/node-libs-browser/node_modules/safe-buffer/index.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/node-libs-browser/node_modules/safe-buffer/index.js ***!
-  \**************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* eslint-disable node/no-deprecated-api */
-var buffer = __webpack_require__(/*! buffer */ "./node_modules/buffer/index.js")
-var Buffer = buffer.Buffer
-
-// alternative to using Object.keys for old browsers
-function copyProps (src, dst) {
-  for (var key in src) {
-    dst[key] = src[key]
-  }
-}
-if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow) {
-  module.exports = buffer
-} else {
-  // Copy properties from require('buffer')
-  copyProps(buffer, exports)
-  exports.Buffer = SafeBuffer
-}
-
-function SafeBuffer (arg, encodingOrOffset, length) {
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-// Copy static methods from Buffer
-copyProps(Buffer, SafeBuffer)
-
-SafeBuffer.from = function (arg, encodingOrOffset, length) {
-  if (typeof arg === 'number') {
-    throw new TypeError('Argument must not be a number')
-  }
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-SafeBuffer.alloc = function (size, fill, encoding) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  var buf = Buffer(size)
-  if (fill !== undefined) {
-    if (typeof encoding === 'string') {
-      buf.fill(fill, encoding)
-    } else {
-      buf.fill(fill)
-    }
-  } else {
-    buf.fill(0)
-  }
-  return buf
-}
-
-SafeBuffer.allocUnsafe = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return Buffer(size)
-}
-
-SafeBuffer.allocUnsafeSlow = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return buffer.SlowBuffer(size)
-}
-
-
-/***/ }),
-
 /***/ "./node_modules/node-libs-browser/node_modules/string_decoder/lib/string_decoder.js":
 /*!******************************************************************************************!*\
   !*** ./node_modules/node-libs-browser/node_modules/string_decoder/lib/string_decoder.js ***!
@@ -40365,7 +40294,7 @@ SafeBuffer.allocUnsafeSlow = function (size) {
 
 /*<replacement>*/
 
-var Buffer = __webpack_require__(/*! safe-buffer */ "./node_modules/node-libs-browser/node_modules/safe-buffer/index.js").Buffer;
+var Buffer = __webpack_require__(/*! safe-buffer */ "./node_modules/node-libs-browser/node_modules/string_decoder/node_modules/safe-buffer/index.js").Buffer;
 /*</replacement>*/
 
 var isEncoding = Buffer.isEncoding || function (encoding) {
@@ -40636,6 +40565,81 @@ function simpleWrite(buf) {
 function simpleEnd(buf) {
   return buf && buf.length ? this.write(buf) : '';
 }
+
+/***/ }),
+
+/***/ "./node_modules/node-libs-browser/node_modules/string_decoder/node_modules/safe-buffer/index.js":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/node-libs-browser/node_modules/string_decoder/node_modules/safe-buffer/index.js ***!
+  \******************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* eslint-disable node/no-deprecated-api */
+var buffer = __webpack_require__(/*! buffer */ "./node_modules/buffer/index.js")
+var Buffer = buffer.Buffer
+
+// alternative to using Object.keys for old browsers
+function copyProps (src, dst) {
+  for (var key in src) {
+    dst[key] = src[key]
+  }
+}
+if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow) {
+  module.exports = buffer
+} else {
+  // Copy properties from require('buffer')
+  copyProps(buffer, exports)
+  exports.Buffer = SafeBuffer
+}
+
+function SafeBuffer (arg, encodingOrOffset, length) {
+  return Buffer(arg, encodingOrOffset, length)
+}
+
+SafeBuffer.prototype = Object.create(Buffer.prototype)
+
+// Copy static methods from Buffer
+copyProps(Buffer, SafeBuffer)
+
+SafeBuffer.from = function (arg, encodingOrOffset, length) {
+  if (typeof arg === 'number') {
+    throw new TypeError('Argument must not be a number')
+  }
+  return Buffer(arg, encodingOrOffset, length)
+}
+
+SafeBuffer.alloc = function (size, fill, encoding) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  var buf = Buffer(size)
+  if (fill !== undefined) {
+    if (typeof encoding === 'string') {
+      buf.fill(fill, encoding)
+    } else {
+      buf.fill(fill)
+    }
+  } else {
+    buf.fill(0)
+  }
+  return buf
+}
+
+SafeBuffer.allocUnsafe = function (size) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  return Buffer(size)
+}
+
+SafeBuffer.allocUnsafeSlow = function (size) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  return buffer.SlowBuffer(size)
+}
+
 
 /***/ }),
 
@@ -69726,10 +69730,10 @@ Store.prototype.getAllCookies = function(cb) {
 /*!************************************************!*\
   !*** ./node_modules/tough-cookie/package.json ***!
   \************************************************/
-/*! exports provided: author, contributors, license, name, description, keywords, version, homepage, repository, bugs, main, files, scripts, engines, devDependencies, dependencies, _resolved, _integrity, _from, default */
+/*! exports provided: _args, _from, _id, _inBundle, _integrity, _location, _phantomChildren, _requested, _requiredBy, _resolved, _spec, _where, author, bugs, contributors, dependencies, description, devDependencies, engines, files, homepage, keywords, license, main, name, repository, scripts, version, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"author\":{\"name\":\"Jeremy Stashewsky\",\"email\":\"jstash@gmail.com\",\"website\":\"https://github.com/stash\"},\"contributors\":[{\"name\":\"Alexander Savin\",\"website\":\"https://github.com/apsavin\"},{\"name\":\"Ian Livingstone\",\"website\":\"https://github.com/ianlivingstone\"},{\"name\":\"Ivan Nikulin\",\"website\":\"https://github.com/inikulin\"},{\"name\":\"Lalit Kapoor\",\"website\":\"https://github.com/lalitkapoor\"},{\"name\":\"Sam Thompson\",\"website\":\"https://github.com/sambthompson\"},{\"name\":\"Sebastian Mayr\",\"website\":\"https://github.com/Sebmaster\"}],\"license\":\"BSD-3-Clause\",\"name\":\"tough-cookie\",\"description\":\"RFC6265 Cookies and Cookie Jar for node.js\",\"keywords\":[\"HTTP\",\"cookie\",\"cookies\",\"set-cookie\",\"cookiejar\",\"jar\",\"RFC6265\",\"RFC2965\"],\"version\":\"2.4.3\",\"homepage\":\"https://github.com/salesforce/tough-cookie\",\"repository\":{\"type\":\"git\",\"url\":\"git://github.com/salesforce/tough-cookie.git\"},\"bugs\":{\"url\":\"https://github.com/salesforce/tough-cookie/issues\"},\"main\":\"./lib/cookie\",\"files\":[\"lib\"],\"scripts\":{\"test\":\"vows test/*_test.js\",\"cover\":\"nyc --reporter=lcov --reporter=html vows test/*_test.js\"},\"engines\":{\"node\":\">=0.8\"},\"devDependencies\":{\"async\":\"^1.4.2\",\"nyc\":\"^11.6.0\",\"string.prototype.repeat\":\"^0.2.0\",\"vows\":\"^0.8.1\"},\"dependencies\":{\"psl\":\"^1.1.24\",\"punycode\":\"^1.4.1\"},\"_resolved\":\"https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.4.3.tgz\",\"_integrity\":\"sha512-Q5srk/4vDM54WJsJio3XNn6K2sCG+CQ8G5Wz6bZhRZoAe/+TxjWB/GlFAnYEbkYVlON9FMk/fE3h2RLpPXo4lQ==\",\"_from\":\"tough-cookie@2.4.3\"}");
+module.exports = JSON.parse("{\"_args\":[[\"tough-cookie@2.4.3\",\"/Users/niklas.kiefer/camunda-modeler-wakatime-plugin\"]],\"_from\":\"tough-cookie@2.4.3\",\"_id\":\"tough-cookie@2.4.3\",\"_inBundle\":false,\"_integrity\":\"sha512-Q5srk/4vDM54WJsJio3XNn6K2sCG+CQ8G5Wz6bZhRZoAe/+TxjWB/GlFAnYEbkYVlON9FMk/fE3h2RLpPXo4lQ==\",\"_location\":\"/tough-cookie\",\"_phantomChildren\":{},\"_requested\":{\"type\":\"version\",\"registry\":true,\"raw\":\"tough-cookie@2.4.3\",\"name\":\"tough-cookie\",\"escapedName\":\"tough-cookie\",\"rawSpec\":\"2.4.3\",\"saveSpec\":null,\"fetchSpec\":\"2.4.3\"},\"_requiredBy\":[\"/request\",\"/request-promise\"],\"_resolved\":\"https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.4.3.tgz\",\"_spec\":\"2.4.3\",\"_where\":\"/Users/niklas.kiefer/camunda-modeler-wakatime-plugin\",\"author\":{\"name\":\"Jeremy Stashewsky\",\"email\":\"jstash@gmail.com\"},\"bugs\":{\"url\":\"https://github.com/salesforce/tough-cookie/issues\"},\"contributors\":[{\"name\":\"Alexander Savin\"},{\"name\":\"Ian Livingstone\"},{\"name\":\"Ivan Nikulin\"},{\"name\":\"Lalit Kapoor\"},{\"name\":\"Sam Thompson\"},{\"name\":\"Sebastian Mayr\"}],\"dependencies\":{\"psl\":\"^1.1.24\",\"punycode\":\"^1.4.1\"},\"description\":\"RFC6265 Cookies and Cookie Jar for node.js\",\"devDependencies\":{\"async\":\"^1.4.2\",\"nyc\":\"^11.6.0\",\"string.prototype.repeat\":\"^0.2.0\",\"vows\":\"^0.8.1\"},\"engines\":{\"node\":\">=0.8\"},\"files\":[\"lib\"],\"homepage\":\"https://github.com/salesforce/tough-cookie\",\"keywords\":[\"HTTP\",\"cookie\",\"cookies\",\"set-cookie\",\"cookiejar\",\"jar\",\"RFC6265\",\"RFC2965\"],\"license\":\"BSD-3-Clause\",\"main\":\"./lib/cookie\",\"name\":\"tough-cookie\",\"repository\":{\"type\":\"git\",\"url\":\"git://github.com/salesforce/tough-cookie.git\"},\"scripts\":{\"cover\":\"nyc --reporter=lcov --reporter=html vows test/*_test.js\",\"test\":\"vows test/*_test.js\"},\"version\":\"2.4.3\"}");
 
 /***/ }),
 
@@ -76247,7 +76251,7 @@ function extend() {
 /*! exports provided: name, version, description, main, scripts, repository, keywords, author, license, bugs, homepage, devDependencies, dependencies, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"name\":\"camunda-modeler-wakatime-plugin\",\"version\":\"0.4.6\",\"description\":\"Wakatime Plugin for the Camunda Modeler\",\"main\":\"index.js\",\"scripts\":{\"all\":\"run-s bundle\",\"lint\":\"eslint .\",\"client\":\"run-s bundle\",\"bundle:client\":\"webpack --config webpackClient.config.js\",\"bundle:menu\":\"webpack --config webpackMenu.config.js\",\"bundle\":\"run-s bundle:client bundle:menu\",\"test\":\"run-s lint all\"},\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin.git\"},\"keywords\":[\"camunda\",\"modeler\",\"plugin\",\"wakatime\"],\"author\":\"Niklas Kiefer\",\"license\":\"MIT\",\"bugs\":{\"url\":\"https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin/issues\"},\"homepage\":\"https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin#readme\",\"devDependencies\":{\"npm-run-all\":\"^4.1.5\",\"webpack\":\"^4.37.0\",\"webpack-cli\":\"^3.3.6\"},\"dependencies\":{\"camunda-modeler-plugin-helpers\":\"^3.1.0\",\"electron\":\"^6.0.0\",\"eslint\":\"^6.1.0\",\"eslint-plugin-bpmn-io\":\"^0.8.2\",\"inherits\":\"^2.0.4\",\"ini\":\"^1.3.5\",\"request-promise\":\"^4.2.4\"}}");
+module.exports = JSON.parse("{\"name\":\"camunda-modeler-wakatime-plugin\",\"version\":\"0.5.0\",\"description\":\"Wakatime Plugin for the Camunda Modeler\",\"main\":\"index.js\",\"scripts\":{\"all\":\"run-s bundle\",\"lint\":\"eslint .\",\"client\":\"run-s bundle\",\"bundle:client\":\"webpack --config webpackClient.config.js\",\"bundle:menu\":\"webpack --config webpackMenu.config.js\",\"bundle\":\"run-s bundle:client bundle:menu\",\"test\":\"run-s lint all\"},\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin.git\"},\"keywords\":[\"camunda\",\"modeler\",\"plugin\",\"wakatime\"],\"author\":\"Niklas Kiefer\",\"license\":\"MIT\",\"bugs\":{\"url\":\"https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin/issues\"},\"homepage\":\"https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin#readme\",\"devDependencies\":{\"npm-run-all\":\"^4.1.5\",\"webpack\":\"^4.41.0\",\"webpack-cli\":\"^3.3.9\"},\"dependencies\":{\"camunda-modeler-plugin-helpers\":\"^3.1.0\",\"electron\":\"^6.0.10\",\"eslint\":\"^6.4.0\",\"eslint-plugin-bpmn-io\":\"^0.10.0\",\"inherits\":\"^2.0.4\",\"ini\":\"^1.3.5\",\"request-promise\":\"^4.2.4\"}}");
 
 /***/ }),
 
