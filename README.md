@@ -9,6 +9,8 @@
 2. Start the Camunda Modeler
 3. When an API-Key is added, the application will start sending activity heartbeats to Wakatime
 
+Due to a current issue (cf. [#53](https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin/issues/53)) you will have to give the `--dangerously-enable-node-integration` argument when starting the Camunda Modeler application (step 2) to ensure modeling operations are sending correctly to Wakatime.
+
 
 ## Compatibility Notice
 
