@@ -1,7 +1,7 @@
 # camunda-modeler-wakatime-plugin
 [Wakatime](https://wakatime.com) Plugin for the [Camunda Modeler](https://github.com/camunda/camunda-modeler)
 
-[![Build Status](https://travis-ci.org/pinussilvestrus/camunda-modeler-wakatime-plugin.svg?branch=master)](https://travis-ci.org/pinussilvestrus/camunda-modeler-wakatime-plugin) [![Compatible with Camunda Modeler version 3.0](https://img.shields.io/badge/Camunda%20Modeler-3.0+-blue.svg)](https://github.com/camunda/camunda-modeler)
+![Build Status](https://github.com/pinussilvestrus/camunda-modeler-wakatime-plugin/workflows/ci/badge.svg) [![Modeler version 3.0](https://img.shields.io/badge/Camunda%20Modeler-3.0+-blue.svg)](https://github.com/camunda/camunda-modeler)
 
 ## How to use
 
